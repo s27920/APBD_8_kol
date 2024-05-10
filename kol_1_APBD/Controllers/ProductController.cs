@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using kol_1_APBD.Exceptions;
 using kol_1_APBD.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +16,28 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
 
-    [HttpPost("{id:int}")]
+    [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> getProductsByOrderIdAsync(int id)
     {
         return Ok(await _productService.getOrderByIdAsync(id));
+    }
+
+    [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> deleteProductById(int id)
+    {
+        try
+        {
+            return Ok(await _productService.deleteProductById(id));
+        }
+        catch (ConflictException e)
+        {
+            return Conflict(e);
+        }
+        
     }
 }

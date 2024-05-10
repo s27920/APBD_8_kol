@@ -5,7 +5,8 @@ namespace kol_1_APBD.Services;
 
 public interface IProductService
 {
-    public Task<Product> getOrderByIdAsync(int id);
+    public Task<Order> getOrderByIdAsync(int id);
+    public Task<bool> deleteProductById(int id);
 }
 
 public class ProductService : IProductService
@@ -17,8 +18,14 @@ public class ProductService : IProductService
         _productRepository = productRepository;
     }
 
-    public async Task<Product> getOrderByIdAsync(int id)
+    public async Task<Order> getOrderByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _productRepository.getOrderByIdAsync(id);
     }
+
+    public async Task<bool> deleteProductById(int id)
+    {
+        return await _productRepository.deleteByIdAsync(id);
+    }
+    
 }
