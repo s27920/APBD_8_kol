@@ -8,6 +8,7 @@ public interface IProductRepository
 {
     public Task<Order> getOrderByIdAsync(int id);
     public Task<bool> deleteByIdAsync(int id);
+    public Task<bool> checkIfOrderExistsASync(int id);
 }
 
 public class ProductRepository : IProductRepository
@@ -81,7 +82,8 @@ public class ProductRepository : IProductRepository
         {
             var query = "DELETE FROM \"ORDER\" WHERE IdOrder = @IdOrder1; DELETE FROM Order_ProducT WHERE IdOrder = @IdOrder2;";
             await using var command = new SqlCommand(query, connection);
-            
+            command.Parameters.AddWithValue("@IdOrder1", id);
+            command.Parameters.AddWithValue("@IdOrder2", id);
             command.Transaction = (SqlTransaction)transaction;
             var rowsAffected = await command.ExecuteNonQueryAsync();
             await transaction.CommitAsync();
@@ -97,5 +99,16 @@ public class ProductRepository : IProductRepository
         }
 
         return false;
+    }
+
+    public async Task<bool> checkIfOrderExistsASync(int id)
+    {
+        await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await connection.OpenAsync();
+        var query = "SELECT COUNT(1) FROM \"Order\" WHERE IdOrder = @IdOrder";
+        await using var command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@IdOrder", id);
+        await using var reader = await command.ExecuteReaderAsync();
+        return reader.HasRows;
     }
 }

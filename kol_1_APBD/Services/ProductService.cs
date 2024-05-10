@@ -1,4 +1,5 @@
-﻿using kol_1_APBD.Models;
+﻿using kol_1_APBD.Exceptions;
+using kol_1_APBD.Models;
 using kol_1_APBD.Repositories;
 
 namespace kol_1_APBD.Services;
@@ -20,11 +21,19 @@ public class ProductService : IProductService
 
     public async Task<Order> getOrderByIdAsync(int id)
     {
+        if (!await _productRepository.checkIfOrderExistsASync(id))
+        {
+            throw new NotFoundException("No Order found under given id");
+        }
         return await _productRepository.getOrderByIdAsync(id);
     }
 
     public async Task<bool> deleteProductById(int id)
     {
+        if (!await _productRepository.checkIfOrderExistsASync(id))
+        {
+            throw new NotFoundException("No Order found under given id");
+        }
         return await _productRepository.deleteByIdAsync(id);
     }
     

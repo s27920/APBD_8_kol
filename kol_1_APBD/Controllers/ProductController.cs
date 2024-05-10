@@ -21,7 +21,14 @@ public class ProductController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> getProductsByOrderIdAsync(int id)
     {
-        return Ok(await _productService.getOrderByIdAsync(id));
+        try
+        {
+            return Ok(await _productService.getOrderByIdAsync(id));
+        }
+        catch (NotFoundException e)
+        {
+            return NotFound(e);
+        }
     }
 
     [HttpDelete("{id:int}")]
@@ -37,6 +44,10 @@ public class ProductController : ControllerBase
         catch (ConflictException e)
         {
             return Conflict(e);
+        }
+        catch (NotFoundException e)
+        {
+            return NotFound(e);
         }
         
     }
