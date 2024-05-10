@@ -80,7 +80,8 @@ public class ProductRepository : IProductRepository
         await using var transaction = await connection.BeginTransactionAsync();
         try
         {
-            var query = "DELETE FROM \"ORDER\" WHERE IdOrder = @IdOrder1; DELETE FROM Order_ProducT WHERE IdOrder = @IdOrder2;";
+            var query = "DELETE FROM \"ORDER\" WHERE IdOrder = @IdOrder1;" +
+                        " DELETE FROM Order_Product WHERE IdOrder = @IdOrder2;";
             await using var command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@IdOrder1", id);
             command.Parameters.AddWithValue("@IdOrder2", id);
