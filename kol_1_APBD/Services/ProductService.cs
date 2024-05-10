@@ -7,7 +7,7 @@ namespace kol_1_APBD.Services;
 public interface IProductService
 {
     public Task<Order> getOrderByIdAsync(int id);
-    public Task<bool> deleteProductById(int id);
+    public Task<bool> deleteProductByIdAsync(int id);
 }
 
 public class ProductService : IProductService
@@ -28,7 +28,7 @@ public class ProductService : IProductService
         return await _productRepository.getOrderByIdAsync(id);
     }
 
-    public async Task<bool> deleteProductById(int id)
+    public async Task<bool> deleteProductByIdAsync(int id)
     {
         if (!await _productRepository.checkIfOrderExistsASync(id))
         {

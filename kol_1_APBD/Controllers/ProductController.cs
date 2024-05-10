@@ -35,11 +35,11 @@ public class ProductController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> deleteProductById(int id)
+    public async Task<IActionResult> deleteProductByIdAsync(int id)
     {
         try
         {
-            return Ok(await _productService.deleteProductById(id));
+            return Ok(await _productService.deleteProductByIdAsync(id));
         }
         catch (ConflictException e)
         {
