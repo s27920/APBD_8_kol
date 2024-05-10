@@ -70,7 +70,7 @@ public class ProductRepository : IProductRepository
             return new Order {IdOrder = id, Name = orderName, Description = orderDescription, Products = productList, CreationDate = orderCreationDate, IdClient = orderIdClient};
         }
 
-        return null;
+        throw new ConflictException("empty");
     }
 
     public async Task<bool> deleteByIdAsync(int id)
